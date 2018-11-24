@@ -1,0 +1,107 @@
+2018-11-04 01:26:29,340 [INFO] <MainProcess> (MainThread) start load data
+2018-11-04 01:26:31,454 [INFO] <MainProcess> (MainThread) start seg train data
+Building prefix dict from the default dictionary ...
+2018-11-04 01:26:31,454 [DEBUG] <MainProcess> (MainThread) Building prefix dict from the default dictionary ...
+Loading model from cache /var/folders/ks/cqrpbtv97wl6y8960przctsh0000gn/T/jieba.cache
+2018-11-04 01:26:31,457 [DEBUG] <MainProcess> (MainThread) Loading model from cache /var/folders/ks/cqrpbtv97wl6y8960przctsh0000gn/T/jieba.cache
+Loading model cost 0.575 seconds.
+2018-11-04 01:26:32,029 [DEBUG] <MainProcess> (MainThread) Loading model cost 0.575 seconds.
+Prefix dict has been built succesfully.
+2018-11-04 01:26:32,029 [DEBUG] <MainProcess> (MainThread) Prefix dict has been built succesfully.
+2018-11-04 01:35:02,293 [INFO] <MainProcess> (MainThread) complete seg train data
+2018-11-04 01:35:02,293 [INFO] <MainProcess> (MainThread) start train feature extraction
+2018-11-04 01:12:31,870 [INFO] <MainProcess> (MainThread) complete train feature extraction models
+2018-11-04 01:12:44,499 [INFO] <MainProcess> (MainThread) vocab shape: 419502
+2018-11-04 01:12:44,501 [INFO] <MainProcess> (MainThread) start train model
+2018-11-04 01:12:44,587 [INFO] <MainProcess> (MainThread) start train location_traffic_convenience model
+/anaconda3/envs/cs230baseline/lib/python2.7/site-packages/sklearn/svm/base.py:196: FutureWarning: The default value of gamma will change from 'auto' to 'scale' in version 0.22 to account better for unscaled features. Set gamma explicitly to 'auto' or 'scale' to avoid this warning.
+  "avoid this warning.", FutureWarning)
+2018-11-04 03:31:42,292 [INFO] <MainProcess> (MainThread) complete train location_traffic_convenience model
+2018-11-04 03:31:42,301 [INFO] <MainProcess> (MainThread) start train location_distance_from_business_district model
+2018-11-04 05:11:45,188 [INFO] <MainProcess> (MainThread) complete train location_distance_from_business_district model
+2018-11-04 05:11:45,194 [INFO] <MainProcess> (MainThread) start train location_easy_to_find model
+2018-11-04 07:03:21,913 [INFO] <MainProcess> (MainThread) complete train location_easy_to_find model
+2018-11-04 07:03:21,919 [INFO] <MainProcess> (MainThread) start train service_wait_time model
+2018-11-04 08:00:24,114 [INFO] <MainProcess> (MainThread) complete train service_wait_time model
+2018-11-04 08:00:24,123 [INFO] <MainProcess> (MainThread) start train service_waiters_attitude model
+2018-11-04 13:09:28,933 [INFO] <MainProcess> (MainThread) complete train service_waiters_attitude model
+2018-11-04 13:09:28,941 [INFO] <MainProcess> (MainThread) start train service_parking_convenience model
+2018-11-04 13:42:35,876 [INFO] <MainProcess> (MainThread) complete train service_parking_convenience model
+2018-11-04 13:42:35,881 [INFO] <MainProcess> (MainThread) start train service_serving_speed model
+2018-11-04 14:58:03,054 [INFO] <MainProcess> (MainThread) complete train service_serving_speed model
+2018-11-04 14:58:03,064 [INFO] <MainProcess> (MainThread) start train price_level model
+2018-11-04 18:51:58,252 [INFO] <MainProcess> (MainThread) complete train price_level model
+2018-11-04 18:51:58,260 [INFO] <MainProcess> (MainThread) start train price_cost_effective model
+2018-11-04 20:48:29,808 [INFO] <MainProcess> (MainThread) complete train price_cost_effective model
+2018-11-04 20:48:29,821 [INFO] <MainProcess> (MainThread) start train price_discount model
+2018-11-05 00:39:44,749 [INFO] <MainProcess> (MainThread) complete train price_discount model
+2018-11-05 00:39:44,758 [INFO] <MainProcess> (MainThread) start train environment_decoration model
+2018-11-05 05:16:10,557 [INFO] <MainProcess> (MainThread) complete train environment_decoration model
+2018-11-05 05:16:10,570 [INFO] <MainProcess> (MainThread) start train environment_noise model
+2018-11-05 08:09:50,059 [INFO] <MainProcess> (MainThread) complete train environment_noise model
+2018-11-05 08:09:50,069 [INFO] <MainProcess> (MainThread) start train environment_space model
+2018-11-05 11:34:42,690 [INFO] <MainProcess> (MainThread) complete train environment_space model
+2018-11-05 11:34:42,702 [INFO] <MainProcess> (MainThread) start train environment_cleaness model
+2018-11-05 15:06:56,389 [INFO] <MainProcess> (MainThread) complete train environment_cleaness model
+2018-11-05 15:06:56,397 [INFO] <MainProcess> (MainThread) start train dish_portion model
+2018-11-05 19:09:16,236 [INFO] <MainProcess> (MainThread) complete train dish_portion model
+2018-11-05 19:09:16,270 [INFO] <MainProcess> (MainThread) start train dish_taste model
+2018-11-05 23:27:21,791 [INFO] <MainProcess> (MainThread) complete train dish_taste model
+2018-11-05 23:27:21,810 [INFO] <MainProcess> (MainThread) start train dish_look model
+2018-11-06 01:47:46,083 [INFO] <MainProcess> (MainThread) complete train dish_look model
+2018-11-06 01:47:46,098 [INFO] <MainProcess> (MainThread) start train dish_recommendation model
+2018-11-06 03:23:28,394 [INFO] <MainProcess> (MainThread) complete train dish_recommendation model
+2018-11-06 03:23:28,412 [INFO] <MainProcess> (MainThread) start train others_overall_experience model
+2018-11-06 06:32:39,554 [INFO] <MainProcess> (MainThread) complete train others_overall_experience model
+2018-11-06 06:32:39,570 [INFO] <MainProcess> (MainThread) start train others_willing_to_consume_again model
+2018-11-06 10:14:00,992 [INFO] <MainProcess> (MainThread) complete train others_willing_to_consume_again model
+2018-11-06 10:14:01,002 [INFO] <MainProcess> (MainThread) complete train model
+2018-11-06 10:14:01,083 [INFO] <MainProcess> (MainThread) start seg validate data
+2018-11-06 10:15:16,369 [INFO] <MainProcess> (MainThread) complete seg validate data
+2018-11-06 10:15:16,369 [INFO] <MainProcess> (MainThread) start validate model
+/anaconda3/envs/cs230baseline/lib/python2.7/site-packages/sklearn/metrics/classification.py:1143: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+2018-11-06 17:20:29,061 [INFO] <MainProcess> (MainThread) f1_scores: 
+location_traffic_convenience:0.219699517883
+location_distance_from_business_district:0.222551050607
+location_easy_to_find:0.217151908282
+service_wait_time:0.234391047208
+service_waiters_attitude:0.142721036585
+service_parking_convenience:0.241788886594
+service_serving_speed:0.229016873216
+price_level:0.166622216296
+price_cost_effective:0.216210080218
+price_discount:0.190874618745
+environment_decoration:0.171067058462
+environment_noise:0.206124368167
+environment_space:0.193765056551
+environment_cleaness:0.195072369491
+dish_portion:0.17549325026
+dish_taste:0.171686219576
+dish_look:0.208828325181
+dish_recommendation:0.223073514751
+others_overall_experience:0.200897308076
+others_willing_to_consume_again:0.192042374969
+
+
+2018-11-06 17:20:29,071 [INFO] <MainProcess> (MainThread) f1_score: 0.200953854056
+2018-11-06 17:20:29,071 [INFO] <MainProcess> (MainThread) complete validate model
+2018-11-06 17:20:29,071 [INFO] <MainProcess> (MainThread) start save model
+2018-11-06 18:19:04,136 [INFO] <MainProcess> (MainThread) start load data
+2018-11-06 18:19:04,416 [INFO] <MainProcess> (MainThread) start load model
+Traceback (most recent call last):
+  File "main_predict.py", line 30, in <module>
+    classifier_dict = joblib.load(config.model_save_path + model_name)
+  File "/anaconda3/envs/cs230baseline/lib/python2.7/site-packages/sklearn/externals/joblib/numpy_pickle.py", line 598, in load
+    obj = _unpickle(fobj, filename, mmap_mode)
+  File "/anaconda3/envs/cs230baseline/lib/python2.7/site-packages/sklearn/externals/joblib/numpy_pickle.py", line 526, in _unpickle
+    obj = unpickler.load()
+  File "/anaconda3/envs/cs230baseline/lib/python2.7/pickle.py", line 864, in load
+    dispatch[key](self)
+  File "/anaconda3/envs/cs230baseline/lib/python2.7/site-packages/sklearn/externals/joblib/numpy_pickle.py", line 352, in load_build
+    self.stack.append(array_wrapper.read(self))
+  File "/anaconda3/envs/cs230baseline/lib/python2.7/site-packages/sklearn/externals/joblib/numpy_pickle.py", line 195, in read
+    array = self.read_array(unpickler)
+  File "/anaconda3/envs/cs230baseline/lib/python2.7/site-packages/sklearn/externals/joblib/numpy_pickle.py", line 156, in read_array
+    array.shape = self.shape
+ValueError: cannot reshape array of size 1995375 into shape (1995591,)
