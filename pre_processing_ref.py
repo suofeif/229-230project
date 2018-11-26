@@ -70,6 +70,19 @@ def embedding_data():
     val_vec = []
     test_vec = []
 
+    model = Word2Vec.load("vec_model")
+
+
+
+def pad_data()
+    import tensorflow as tf
+    pad_sequence = tf.keras.preprocessing.sequence.pad_sequences
+    print("max_sequence_length:",max_sequence_length)
+    X_train = pad_sequence(np.array(X_train),maxlen=max_sequence_length,padding='pre',truncating='pre',value = 0)
+    X_valid = pad_sequence(np.array(X_valid),maxlen=max_sequence_length,padding='pre',truncating='pre',value = 0)
+    X_test = pad_sequence(np.array(X_test),maxlen=max_sequence_length,padding='pre',truncating='pre',value = 0)
+
+
 
 
 
