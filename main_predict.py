@@ -21,7 +21,7 @@ if __name__ == '__main__':
     if not model_name:
         model_name = "model_dict.pkl"
 
-    # load data
+    # load test data
     logger.info("start load data")
     test_data_df = load_data_from_csv(config.test_data_path)
 

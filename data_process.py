@@ -24,8 +24,8 @@ def seg_words(contents):
 
     return contents_segs
 
-def load_tencent_model():
-    wv_from_text = KeyedVectors.load_word2vec_format("../tencentVec/Tencent_AILab_ChineseEmbedding.txt", binary = False)
+def load_word2vec_model():
+    #wv_from_text = KeyedVectors.load_word2vec_format("../tencentVec/Tencent_AILab_ChineseEmbedding.txt", binary = False)
 
     return wv_from_text
 

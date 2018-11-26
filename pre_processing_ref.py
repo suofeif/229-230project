@@ -52,7 +52,7 @@ def seg_words(contents):
     return contents_segs
 
 def train_vec(sentences):
-    model = Word2Vec(sentences,size=300, window = 5, min_count=5)
+    model = Word2Vec(sentences,size=300, window = 5, min_count=5, iter = 100)
 
     return model
 
@@ -73,6 +73,42 @@ def embedding_data():
     model = Word2Vec.load("vec_model")
 
 
+def one_hot():
+    PAD_ID = 0
+    UNK_ID=1
+    CLS_ID=2
+    MASK_ID=3
+    _PAD="_PAD"
+    _UNK="UNK"
+    _CLS="CLS"
+    _MASK="MASK"
+    num_example,_=data_traininig_small.shape
+    print("num_example:",num_example)
+    total_length=0
+    c_inputs=Counter()
+    count_index=0
+    for index, row in data_big.iterrows():
+        #id_=row['id']
+        input_list=[x for x in jieba.lcut(row['content']) if x.strip() and x!="\""]
+        total_length+=len(input_list)
+        c_inputs.update(input_list)
+        count_index=count_index+1
+        if count_index%5000==0:
+            print("count.create vocabulary of words:",count_index)
+
+    vocab_list=c_inputs.most_common(vocab_size-4)
+    #print("vocab_list:",vocab_list)
+    vocab_word2index={}
+    vocab_word2index[_PAD]=PAD_ID
+    vocab_word2index[_UNK]=UNK_ID
+    vocab_word2index[_CLS]=CLS_ID
+    vocab_word2index[_MASK]=MASK_ID
+
+    count_index=0
+    for i,tuplee in enumerate(vocab_list):
+        word,freq=tuplee
+        vocab_word2index[word]=i+4
+    #print("vocab_word2index:",vocab_word2index)
 
 def pad_data()
     import tensorflow as tf
@@ -86,7 +122,7 @@ def pad_data()
 
 
 
-logger.info("start load data")
+'''logger.info("start load data")
 train_data_df = load_data_from_csv(config.train_data_path)
 validate_data_df = load_data_from_csv(config.validate_data_path)
 
@@ -104,4 +140,4 @@ model = train_vec(content_train)
 model.save("vec_model")
 train_vec, val_vec, test_vec = embedding_data()
 logger.info("complete train feature extraction models")
-logger.info("vocab shape: %s" % np.shape(vectorizer_tfidf.vocabulary_.keys()))
+logger.info("vocab shape: %s" % np.shape(vectorizer_tfidf.vocabulary_.keys()))'''
