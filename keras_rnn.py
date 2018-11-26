@@ -36,25 +36,33 @@ padded_test_docs = pad_sequences(test_encoded_docs, maxlen=max_length, padding='
 print(padded_docs[3:5])
 # define the model
 n = train_labels.shape[1]
-model={}
+model=dict()
 for i in range(n):
-	model["model"+ str(i)] = Sequential()
-model.add(Embedding(vocab_size, 300, input_length=max_length))
-model.add(LSTM(100, dropout=0.2, recurrent_dropout=0.2))
-#model.add(Flatten())
-model.add(Dense(4, activation='softmax'))
-# compile the model
-model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['acc'])
-# summarize the model
-print(model.summary())
-# fit the model
-label_n = train_labels.shape[1]
-for col in range(n):
-	y = train_labels[:, col]
-	model.fit(padded_train_docs, y, epochs=50, verbose=0)
+	logger.info("start train column" +str(i))
 
-# evaluate the model
-for col in range(n):
-	y = test_labels[:, col]
-	loss, accuracy = model.evaluate(padded_test_docs, y, verbose=0)
-	print('Accuracy: %f' % (accuracy*100))
+	model = Sequential()
+	model.add(Embedding(vocab_size, 300, input_length=max_length))
+	model.add(LSTM(100, dropout=0.2, recurrent_dropout=0.2))
+	#model.add(Flatten())
+	model.add(Dense(4, activation='softmax'))
+	# compile the model
+	model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['acc'])
+	# summarize the model
+	print(model.summary())
+	# fit the model
+	n = train_labels.shape[1]
+	for col in range(n):
+		y = train_labels[:, col]
+		model.fit(padded_train_docs, y, epochs=50, verbose=0)
+
+	# evaluate the model
+	for col in range(n):
+		y = test_labels[:, col]
+		loss, accuracy = model.evaluate(padded_test_docs, y, verbose=0)
+		print('Accuracy: %f' % (accuracy*100))
+
+
+	logger.info("complete train model" + str(i))
+	model[i] = model #store model to dict
+
+logger.info("complete train model")
