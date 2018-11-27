@@ -1,20 +1,26 @@
+import numpy as np
 from numpy import array
 import tensorflow as tf
 import keras
 from keras.preprocessing.text import one_hot
 from keras.preprocessing.sequence import pad_sequences
 from keras.models import Sequential
-from keras.layers import Dense
+from keras.layers import Dense, Input, Dropout, LSTM, Activation
+from keras import optimizers
 from keras.layers import Flatten
 from keras.layers.embeddings import Embedding
 import config
 import os
+import logging
 from keras.models import model_from_json
-from pre_processing_ref import load_data_from_csv, seg_words, train_vec, train_tencent_model, convert_to_onehot, sentence_to_indice, embedding_data
+from pre_processing_ref import load_data_from_csv, seg_words, train_vec, train_tencent_model, convert_to_onehot, sentence_to_indice, embedding_data, wordToIndex
 # define documents
 train=load_data_from_csv(config.train_data_path)
 val = load_data_from_csv(config.validate_data_path)
 print("finish loading data")
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] <%(processName)s> (%(threadName)s) %(message)s')
+logger = logging.getLogger(__name__)
 #test = load_data_from_csv(config.test_data_path)
 
 #val dataset as hold-out val set and test dataset; do cv on train dataset
@@ -59,16 +65,16 @@ max_length = 350
 #print(padded_docs[1:3])
 
 # integer encode the documents
-word2index = {token: token_index for token_index, token in enumerate(embedding_model.index2word)}
-train_indices = sentence_to_indice(seg_train, word2index, max_length)
-val_indices = sentence_to_indice(seg_val, word2index, max_length)
-test_indices = sentence_to_indice(seg_test, word2index, max_length)
+word2index = wordToIndex(vocab)
+train_indices = sentence_to_indice(seg_train, word2index, max_length, vocab)
+val_indices = sentence_to_indice(seg_val, word2index, max_length, vocab)
+test_indices = sentence_to_indice(seg_test, word2index, max_length, vocab)
 
 #make embedding_matrix
-vocab_len = len(vocab)+1
+vocab_len = len(word2index)+1
 emb_dim = 300
 #emb_dim=200
-embedding_matrix = embedding_data(vocab_len, emb_dim, vocab, embedding_model)
+embedding_matrix = embedding_data(vocab_len, emb_dim, word2index, embedding_model, vocab)
 
 # define the model
 n = train_labels.shape[1]
@@ -82,18 +88,18 @@ for i in range(n):
 	#model.add(Flatten())
 	model.add(Dense(4, activation='softmax'))
 	# compile the model
-	adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
+	adam = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
 	model.compile(optimizer=adam, loss='sparse_categorical_crossentropy', metrics=['acc'])
 	# summarize the model
 	print(model.summary())
 	# fit the model
 	n = train_labels.shape[1]
 	#one_hot y
-	y=convert_to_onehot(train_labels[:, i], 4)
+	y=np.array(convert_to_onehot(train_labels[:, i], 4))
 	model.fit(train_indices, y, epochs=2, verbose=0)
 
 	# evaluate the model
-	y=convert_to_onehot(test_labels[:, i], 4)
+	y=np.array(convert_to_onehot(test_labels[:, i], 4))
 	loss, accuracy = model.evaluate(test_indices, y, verbose=0)
 	print('Accuracy: %f' % (accuracy*100))
 

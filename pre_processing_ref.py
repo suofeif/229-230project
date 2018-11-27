@@ -40,16 +40,10 @@ def seg_words(contents):
     return contents_segs
 
 def train_vec(sentences):
-    model = Word2Vec(sentences,size=300, window = 5, min_count=5, iter = 100)
-    save_path = config.embedding_model_save_path
-    path = save_path + "word2vec.model"
-    if not os.path.exists(path):
-    	os.makedirs(path)
-    model.save(path)
-    wv = KeyedVectors.load("model.wv", mmap='r')
+    model = Word2Vec(sentences,size=300, window = 5, min_count=2, iter = 100)
 
     vocab = model.wv.vocab
-    return vocab, wv
+    return vocab, model
 
 def convert_to_onehot(labels, class_num):
     one_hot_mat = []
@@ -61,26 +55,41 @@ def convert_to_onehot(labels, class_num):
         one_hot_mat.append(new_labels) # list concatenation
     return one_hot_mat
 
-def sentence_to_indice(lists, word2index, max_len):
+def wordToIndex(vocab):
+    wordtoindex = {}
+    wordtoindex["PAD"]=0
+    wordtoindex["UNK"]=1
+    i=2
+    for k in vocab:
+        wordtoindex[k] = i
+        i = i+1
+    return wordtoindex
+
+def sentence_to_indice(lists, word2index, max_len, vocab):
     X = np.array(lists)
     m = X.shape[0]
     X_indices = np.zeros((m, max_len))
     for i in range(m):
         sentence = lists[i]
-        for j in range(max_len):
+        for j in range(len(sentence)):
+            if j == max_len:
+                break
             word = sentence[j]
-            k = word2index[word]
+            k=1 #unk index
+            if word in vocab:
+                k = word2index[word]
             X_indices[i, j] = k
+
     return X_indices
 
-def embedding_data(vocab_len, emb_dim, vocab, embedding_model):
-    self.vocab_len = vocab_len
-    self.emb_dim = emb_dim
+def embedding_data(vocab_len, emb_dim, word2index, embedding_model, vocab):
+    vocab_len = vocab_len
+    emb_dim = emb_dim
 
     emb_matrix = np.zeros((vocab_len, emb_dim))
-    index=0
-    for word in vocab:
-        emb_matrix[index, :] = embedding_model[word]
-        index = index+1
+    emb_matrix[1, :] = np.ones((1, emb_dim))
+    for word, index in word2index.items():
+        if word in vocab:
+            emb_matrix[index, :] = embedding_model[word]
 
     return emb_matrix
