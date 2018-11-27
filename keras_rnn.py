@@ -89,13 +89,14 @@ for i in range(n):
 	model.add(Dense(4, activation='softmax'))
 	# compile the model
 	adam = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
-	model.compile(optimizer=adam, loss='sparse_categorical_crossentropy', metrics=['acc'])
+	model.compile(optimizer=adam, loss='categorical_crossentropy', metrics=['acc'])
 	# summarize the model
 	print(model.summary())
 	# fit the model
 	n = train_labels.shape[1]
 	#one_hot y
 	y=np.array(convert_to_onehot(train_labels[:, i], 4))
+	#print(y)
 	model.fit(train_indices, y, epochs=2, verbose=0)
 
 	# evaluate the model
@@ -104,7 +105,7 @@ for i in range(n):
 	print('Accuracy: %f' % (accuracy*100))
 
 	logger.info("complete train model" + str(i))
-	model[i] = model #store model to dict
+	#model[i] = model #store model to dict
 
 logger.info("complete train model")
 logger.info("start save model")
@@ -112,5 +113,5 @@ model_save_path = config.model_save_path
 if not os.path.exists(model_save_path):
 	os.makedirs(model_save_path)
 
-joblib.dump(model, model_save_path + "lstm.pkl")
+
 logger.info("complete save model")
