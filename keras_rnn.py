@@ -13,6 +13,8 @@ import config
 import os
 import logging
 from keras.models import model_from_json
+from keras.callbacks import EarlyStopping
+from keras.layers.normalization import BatchNormalization
 from pre_processing_ref import load_data_from_csv, seg_words, train_vec, train_tencent_model, convert_to_onehot, sentence_to_indice, embedding_data, wordToIndex
 # define documents
 train=load_data_from_csv(config.train_data_path)
@@ -43,50 +45,45 @@ print(test_doc.shape)
 train_labels = array(train.iloc[1:10, 2:])
 val_labels = array(val.iloc[0:5, 2:])
 test_labels = array(val.iloc[6:10, 2:])
+#print("test number"+str(test_labels.shape[0]))
 print("finish loading labels")
 print(train_labels.shape)
 print(val_labels.shape)
 print(test_labels.shape)
 
-#tokenize inputs and train word2vec matrix/load tencent model
-seg_train = seg_words(train_doc)
-seg_val = seg_words(val_doc)
-seg_test = seg_words(test_doc)
-print("finish segmenting")
+train_indices = np.load("train_indices.dat")
+val_indices = np.load("val_indices.dat")
+test_indices = np.load("test_indices.dat")
+max_length=train_indices.shape[1]
+print("max_length")
+print(max_length)
 
-vocab, embedding_model = train_vec(seg_train)
-#vocab, embedding_model = train_tencent_model()
-
-# pad documents to a max length of 4 words
-max_length = 350
-#padded_train_docs = pad_sequences(seg_train, maxlen=max_length, padding='post')
-#padded_val_docs = pad_sequences(seg_val, maxlen=max_length, padding='post')
-#padded_test_docs = pad_sequences(seg_test, maxlen=max_length, padding='post')
-#print(padded_docs[1:3])
-
-# integer encode the documents
-word2index = wordToIndex(vocab)
-train_indices = sentence_to_indice(seg_train, word2index, max_length, vocab)
-val_indices = sentence_to_indice(seg_val, word2index, max_length, vocab)
-test_indices = sentence_to_indice(seg_test, word2index, max_length, vocab)
-
-#make embedding_matrix
-vocab_len = len(word2index)+1
-emb_dim = 300
-#emb_dim=200
-embedding_matrix = embedding_data(vocab_len, emb_dim, word2index, embedding_model, vocab)
+embedding_matrix=np.load("embedding_matrix.dat")
+vocab_len = embedding_matrix.shape[0]
+emb_dim = embedding_matrix.shape[1]
+print("vocab_len")
+print(vocab_len)
+print("emb_dim")
+print(emb_dim)
 
 # define the model
+DROPOUT=0.3
+NUM_HID=16
+REC_DROP=0.3
 n = train_labels.shape[1]
-model=dict()
+#model=dict()
 for i in range(n):
 	logger.info("start train column" +str(i))
 
 	model = Sequential()
+	#model.add(Input(shape=(max_length,), dtype='int32'))
 	model.add(Embedding(vocab_len, emb_dim, input_length=max_length, weights=[embedding_matrix], trainable=False))
-	model.add(LSTM(10, dropout=0.2, recurrent_dropout=0.2))
+	model.add(LSTM(NUM_HID, dropout=DROPOUT, recurrent_dropout=REC_DROP,return_sequences=True))
+	model.add(LSTM(NUM_HID, dropout=DROPOUT, recurrent_dropout=REC_DROP,return_sequences=False))
 	#model.add(Flatten())
-	model.add(Dense(4, activation='softmax'))
+	model.add(Dense(4))
+	model.add(BatchNormalization())
+	model.add(Activation('softmax'))
 	# compile the model
 	adam = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
 	model.compile(optimizer=adam, loss='categorical_crossentropy', metrics=['acc'])
@@ -95,23 +92,21 @@ for i in range(n):
 	# fit the model
 	n = train_labels.shape[1]
 	#one_hot y
-	y=np.array(convert_to_onehot(train_labels[:, i], 4))
+	y_train=np.array(convert_to_onehot(train_labels[:, i], 4))
+	y_val=np.array(convert_to_onehot(val_labels[:, i], 4))
 	#print(y)
-	model.fit(train_indices, y, epochs=2, verbose=0)
+	early_stopping =EarlyStopping(monitor='val_loss', patience=3)
+	model.fit(train_indices, y_train, validation_data=(val_indices, y_val), epochs=2, verbose=0, callbacks = [early_stopping])
 
 	# evaluate the model
-	y=np.array(convert_to_onehot(test_labels[:, i], 4))
-	loss, accuracy = model.evaluate(test_indices, y, verbose=0)
+	y_test=np.array(convert_to_onehot(test_labels[:, i], 4))
+	loss, accuracy = model.evaluate(test_indices, y_test, verbose=0)
 	print('Accuracy: %f' % (accuracy*100))
 
 	logger.info("complete train model" + str(i))
+	#model.save(str(i) + 'th model.h5')
+	print("complete saving model")
+	del model
 	#model[i] = model #store model to dict
 
 logger.info("complete train model")
-logger.info("start save model")
-model_save_path = config.model_save_path
-if not os.path.exists(model_save_path):
-	os.makedirs(model_save_path)
-
-
-logger.info("complete save model")
