@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 #test_doc = val[7501:m_val-1, 1]
 m_val = val.shape[0]
 train_doc = train.iloc[:, 1]
-val_doc = val.iloc[:, 1]
+val_doc = val.iloc[0:7500:, 1]
 test_doc = val.iloc[7501:m_val-1, 1]
 print("finish splitting")
 print(train_doc.shape)
@@ -44,8 +44,8 @@ print(test_doc.shape)
 #val_labels = array(val[0:7500, 2:])
 #test_labels = array(val[7501:m_val-1, 2:])
 train_labels = array(train.iloc[:, 2:])
-val_labels = array(val.iloc[:, 2:])
-test_labels = array(val.iloc[:, 2:])
+val_labels = array(val.iloc[0:7500:, 2:])
+test_labels = array(val.iloc[7501:m_val-1:, 2:])
 #print("test number"+str(test_labels.shape[0]))
 print("finish loading labels")
 print(train_labels.shape)
@@ -97,3 +97,4 @@ for i,v in enumerate(predict):
     if np.argmax(v) == val_labels[i]:
         score += 1
 print ("accuracy is {acc}".format(acc = score/total_num))
+
