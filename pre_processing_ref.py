@@ -19,6 +19,8 @@ def train_tencent_model():
     wv_from_text = KeyedVectors.load_word2vec_format("../tencentVec/Tencent_AILab_ChineseEmbedding.txt", binary = False)
     vocab = wv_from_text.wv.vocab
 
+    print("length of vocab")
+    print(len(vocab))
     return vocab, wv_from_text
 
 
@@ -40,9 +42,11 @@ def seg_words(contents):
     return contents_segs
 
 def train_vec(sentences):
-    model = Word2Vec(sentences,size=300, window = 5, min_count=2, iter = 100)
+    model = Word2Vec(sentences,size=300, window = 5, min_count=5, iter = 100)
 
     vocab = model.wv.vocab
+    print("length of vocab")
+    print(len(vocab))
     return vocab, model
 
 def convert_to_onehot(labels, class_num):
@@ -50,8 +54,13 @@ def convert_to_onehot(labels, class_num):
     for j in range(len(labels)):
         label = labels[j]
         new_labels = [0 for i in range(class_num)]
-        for label in labels:
-            new_labels[label] = 1
+        label_types = {
+        -2: 0,
+        -1: 1,
+        0: 2,
+        1: 3
+        }
+        new_labels[label_types[label]] = 1
         one_hot_mat.append(new_labels) # list concatenation
     return one_hot_mat
 
