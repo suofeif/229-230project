@@ -1,27 +1,18 @@
 
-AI Challenger Sentiment Analysis Baseline
+Fine-Grained Sentiment Analysis of Restaurant Customer Reviews in Chinese Language
 =========================================
-功能描述
+
+* The baseline model (main_train.py, main_predict.py, model.py, data_process.py, config.py) is provided by AI Challenger official. We trained the SVC with rbf kernel. Here is the link to official site: https://github.com/AIChallenger/AI_Challenger_2018/tree/master/Baselines/sentiment_analysis2018_baseline.
+* All the other code files are produced by the team members.
+
+Simple instructions:
 ---
-本工程主要用于为参赛者提供一个baseline，方便参赛者快速上手比赛，主要功能涵盖完成比赛的全流程，如数据读取、分词、特征提取、模型定义以及封装、
-模型训练、模型验证、模型存储以及模型预测等。baseline仅是一个简单的参考，希望参赛者能够充分发挥自己的想象，构建在该任务上更加强大的模型。
-
-开发环境
----
-* 主要依赖工具包以及版本，详情见requirements.txt
-
-项目结构
----
-* src/config.py 项目配置信息模块，主要包括文件读取或存储路径信息
-* src/data_process.py 数据处理模块，主要包括数据的读取以及处理等功能
-* src/model.py 模型定义模块，主要包括模型的定义以及使用封装
-* src/main_train.py 模型训练模块，模型训练流程包括 数据读取、分词、特征提取、模型训练、模型验证、模型存储等步骤
-* src/main_predict.py 模型预测模块，模型预测流程包括 数据和模型的读取、分词、模型预测、预测结果存储等步骤 
-
-
-使用方法
----
-* 配置 在config.py中配置好文件存储路径
-* 训练 运行nohup python main_train.py -mn your_model_name & 训练模型并保存，同时通过日志可以得到验证集的F1_score指标
-* 预测 运行nohup python main_predict.py -mn your_model_name $ 通过加载上一步的模型，在测试集上做预测
-
+* Datasets are available at: https://challenger.ai/competition/fsauor2018
+* prc_save_Word2Vec.py load and output embedding matrix and indices files for train, val, and test data for LSTM-128A.
+* pre_processing_ref.py provides utility functions for all the other files.
+* keras_rnn.py is for LSTM-128A model using w2v representations.
+* Continue_w2v.py is for further tuning and training on a subset of elements with lower performance in the output of keras_rnn.py (LSTM-256).
+* prc_save_data.py for importing tencent w2v model and produce corresponding indices and embedding matrix.
+* small_tencent_matrix.py outputs a subset of the embedding matrix from prc_save_data.py for the favor of computation.
+* tenc_change_indices.py change all the indices from prc_save_data.py to be consistent with the embedding matrix from small_tencent_matrix.py.
+* RNN_tencent_small.py is for LSTM-128B model using mini Tencent embedding model.
